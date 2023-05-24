@@ -1,0 +1,8 @@
+UNK
+O
+B-TERM
+B-DEF
+B-Qualifier
+I-TERM
+I-Qualifier
+I-DEF
