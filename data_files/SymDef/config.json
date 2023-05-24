@@ -1,5 +1,5 @@
 {
-    "name":     "DocDefQueryInplace",
+    "name":     "SymDef",
     "type":     "symnick",
     "version":  "symbol query in place; all sentences",
     "folded":   false
