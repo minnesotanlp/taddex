@@ -29,7 +29,9 @@ def compute_metrics(intent_preds, intent_labels, slot_preds, slot_labels):
     # new metrics added following Dan's suggestion
     slot_simple_result = get_slot_simple_metrics(slot_preds, slot_labels)
     partial_match_result = get_partial_match_metrics(slot_preds, slot_labels)
-
+    #print("Start slot simple result")
+    #print(slot_simple_result)
+    #print("End slot simple result")
     results.update(intent_result)
     results.update(slot_result)
     results.update(sementic_result)
@@ -53,11 +55,14 @@ def compute_metrics_for_sentence_classification(intent_preds, intent_labels, typ
 def compute_metrics_for_slot_tagging(slot_preds, slot_labels, type_=None):
     assert len(slot_preds) == len(slot_labels)
     results = {}
-    print(slot_preds[0])
-    slot_preds = np.array(slot_preds)
-    slot_labels = np.array(slot_labels)
+    #print(slot_preds[0])
+    #slot_preds = np.array(slot_preds)
+    #slot_labels = np.array(slot_labels)
     slot_result = get_slot_metrics(slot_preds, slot_labels, type_)
     slot_simple_result = get_slot_simple_metrics(slot_preds, slot_labels, type_)
+    #print("Start simple results")
+    #print(slot_simple_result)
+    #print("End simple results")
     partial_match_result = get_partial_match_metrics(slot_preds, slot_labels, type_)
     results.update(slot_result)
     results.update(slot_simple_result)
@@ -260,14 +265,19 @@ def get_slot_simple_metrics(preds, labels, type_=None):
         sys.exit(1)
 
     p,r,f,s = score(simple_labels, simple_preds, average=None, labels=label_names)
+    macro_p = round(float(precision_score(simple_labels, simple_preds, average='macro')),3)
+    macro_r = round(float(recall_score(simple_labels, simple_preds, average='macro')),3)
+    macro_f = round(float(f1_score(simple_labels, simple_preds, average='macro')),3)
     s = [int(si) for si in s]
     p = [round(float(pi),3) for pi in p]
     r = [round(float(pi),3) for pi in r]
     f = [round(float(pi),3) for pi in f]
-    per_class = {'p':list(p),'r':list(r), 'f':list(f), 's':list(s)}
-    # pprint(per_class)
+    per_class = {'p':list(p),'r':list(r), 'f':list(f), 's':list(s), 'macro_p':macro_p, 'macro_r':macro_r, 'macro_f': macro_f}
 
     res =  {
+        "slot_merged_precision": per_class['macro_p'],
+        "slot_merged_recall": per_class['macro_r'],
+        "slot_merged_f1": per_class['macro_f'],
         "slot_merged_TERM_precision": per_class['p'][1],
         "slot_merged_TERM_recall": per_class['r'][1],
         "slot_merged_TERM_f1": per_class['f'][1],

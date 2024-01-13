@@ -25,14 +25,8 @@ coloredlogs.install(fmt='%(asctime)s %(name)s %(levelname)s %(message)s',level='
 
 
 MODEL_CLASSES = {
-    'bert': BERT,
-    'distilbert': DistilBERT,
-    'albert': Albert,
     'roberta': Roberta,
-    'joint_roberta': JointRoberta,
-    'allenai/longformer': Longformer,
-    'allenai/scibert': BERT,
-    'allenai/cs': Roberta
+    'joint_roberta': JointRoberta
 }
 
 
@@ -138,12 +132,12 @@ def main(model_args, data_args, training_args):
     logger.info(model_class)
 
     # Load trainer class
-    if training_args.joint_learning:
+    #if training_args.joint_learning:
         #TODO later, this should be merged to Trainer at default
-        trainer_class = JointTrainer
-    else:
-        trainer_class = Trainer
-
+        #trainer_class = JointTrainer
+    #else:
+        #trainer_class = Trainer
+    trainer_class = JointTrainer
     # Start training or inference
     if training_args.do_ensemble and not training_args.do_train and training_args.do_eval:
         predictions_ensemble = []

@@ -281,12 +281,17 @@ def heuristic_filters(
     task : str,
     raw_processed: List[List[str]],
 ) -> Tuple[Dict[str,List[int]], Dict[str,List[List[str]]]]:
+    """
+    Apply various heuristic filters based on the data type [AI2020(abbr-exp), DocDef2(sym-nick), W00(term-def)]
+    """
 
     data_types = task.split('+')
     for data_type in data_types:
+        
         intent_preds[data_type], slot_preds[data_type] = common_filters(intent_preds[data_type], slot_preds[data_type])
 
-        elif data_type == 'SymDef':
+
+        if data_type.startswith('DocDefQueryInplace2'):
             intent_preds[data_type], slot_preds[data_type] = sym_nick_query_filters(intent_preds[data_type], slot_preds[data_type], raw, raw_processed)
         elif data_type == 'W00':
             intent_preds[data_type], slot_preds[data_type] = term_def_filters(intent_preds[data_type], slot_preds[data_type])
